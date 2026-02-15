@@ -1,0 +1,79 @@
+﻿
+
+@{
+    ViewData["Title"] = "Reset Password";
+    Layout = "_LoginLayout";
+}
+
+<div class="container-box-Login">
+
+    <div class="img-top">
+        <div class="Message">
+            <h2>RESET YOUR<br>PASSWORD</h2>
+            <p class="text">Enter your email to reset your password</p>
+        </div>
+    </div>
+
+    <div class="elements register-elements">
+
+        <h2 class="title">FORGOT PASSWORD</h2>
+        <p class="welcome-text">We’ll help you recover access</p>
+
+        @* POST METHOD TO CONTROLLER *@
+        <form asp-action="ResetPass" asp-controller="Account" method="post">
+            Password
+
+            <input type="hidden" name="id" value="@ViewBag.UserId" />
+
+            <div class="input-with-icon">
+                <i class="bi bi-lock-fill text-white"></i>
+                <input class="form-control text-white"
+                       type="password"
+                       name="newpassword"
+                       placeholder="New Password" />
+
+                @if (ViewBag.ConfirmError != null)
+                {
+                    <span class="text-danger">@ViewBag.ConfirmError</span>
+                }
+
+            </div>
+            <div class="input-with-icon">
+                <i class="bi bi-lock-fill text-white"></i>
+                <input class="form-control text-white"
+                       type="password"
+                       name="confirmPassword"
+                       placeholder="Confirm Password" />
+            </div>
+
+            @if (ViewBag.Error != null)
+            {
+                <span class="text-danger">@ViewBag.Error</span>
+            }
+
+            @if (ViewBag.Success != null)
+            {
+                <span class="text-success">@ViewBag.Success</span>
+            }
+
+
+            <a asp-action="Login" asp-controller="Account">
+                Back to Login
+            </a>
+
+            <button type="submit" class="btn btn-primary mt-3">
+                Reset Password
+            </button>
+
+        </form>
+    </div>
+
+
+
+</div>
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

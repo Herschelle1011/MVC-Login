@@ -1,0 +1,55 @@
+﻿
+@{
+    Layout = "_LoginLayout";
+}
+
+<div class="container-box-Login">
+
+    <div class="img-top">
+        <div class="Message">
+            <h2>WELCOME TO THE<br>WEBSITE</h2>
+            <p class="text">Experience the products<br> with ease and legitimate</p>
+        </div>
+    </div>
+
+    <div class="elements">
+        <h2 class="title">USER LOGIN</h2>
+        <p class="welcome-text">Welcome Back</p>
+
+        @* post LOGIN method *@
+        <form asp-action="Login" asp-controller="Account" method="post"> 
+
+            @* Email *@
+            <span class="text-danger"</span>
+            <div class="input-with-icon">
+                <i class="bi bi-person-fill text-white"></i>
+                <input class="form-control text-white"
+                       type="email"
+                       name="email"
+                       value="@ViewBag.Email"
+                       placeholder="Email" />
+            </div>
+
+
+       
+                @* Password *@
+            <span class="text-danger"</span>
+            <div class="input-with-icon">
+                <i class="bi bi-lock-fill text-white"></i>
+                <input class="form-control text-white"
+                       type="password"
+                       name="password"
+                       value="@ViewBag.Password"
+                       placeholder="Password" />
+            </div>
+            <a class="forgot" asp-action="ForgotPassword" asp-controller="Account">Forgot Password?</a>
+            <a asp-action="Register" asp-controller="Account">Register here</a>
+
+            <button type="submit" class="btn btn-primary mt-3">Login</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

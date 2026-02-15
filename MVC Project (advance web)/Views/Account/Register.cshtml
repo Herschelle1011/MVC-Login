@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewData["Title"] = "Register";
+    Layout = "_LoginLayout";
+}
+
+<div class="container-box-Login">
+
+    <div class="img-top">
+        <div class="Message">
+            <h2>CREATE YOUR<br>ACCOUNT</h2>
+            <p class="text">Join us today and<br> experience secure access</p>
+        </div>
+    </div>
+
+    <div class="elements register-elements">
+
+        <h2 class="title">USER REGISTER</h2>
+        <p class="welcome-text">Create your account</p>
+
+
+        @* POST REGISTER METHOD IN CONTROLLER *@
+        <form asp-action="Register" asp-controller="Account" method="post">
+
+            @* Email *@
+            <span class="text-danger"</span>
+            <div class="input-with-icon">
+                <i class="bi bi-person-fill text-white"></i>
+                <input class="form-control text-white"
+                       type="email"
+                       name="email"
+                       value="@ViewBag.Email"
+                       placeholder="Email" />
+
+                @if (ViewBag.Error != null)
+                {
+                    <span class="text-danger">@ViewBag.Error</span>
+                }
+            </div>
+ 
+
+
+
+            @* Password *@    
+            <div class="input-with-icon">
+                <i class="bi bi-lock-fill text-white"></i>
+                <input class="form-control text-white"
+                       type="password"
+                       name="password"
+                       placeholder="Password" />
+
+                @if (ViewBag.ConfirmError != null)
+                {
+                    <span class="text-danger">@ViewBag.ConfirmError</span>
+                }
+            </div>
+            <div class="input-with-icon">
+                <i class="bi bi-lock-fill text-white"></i>
+                <input class="form-control text-white" 
+                       type="password"
+                       name="confirmPassword"
+                       placeholder="Confirm Password"  />
+            </div>
+         
+
+
+            <a asp-action="Login" asp-controller="Account">Already have an account?</a>
+
+            <button type="submit" class="btn btn-primary mt-3">Register</button>
+        </form>
+
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
