@@ -23,34 +23,29 @@
         @* POST REGISTER METHOD IN CONTROLLER *@
 
         <form asp-action="Register" asp-controller="Account" method="post">
-            <span asp-validation-for="Email" class="text-danger"></span>
 
             @* Email *@
             <div class="input-with-icon">
                 <i class="bi bi-person-fill text-white"></i>
-                <input class="form-control text-white" asp-for="Email" placeholder="Email" />   
+                <input class="form-control text-white" asp-for="Email" placeholder="Email" />
             </div>
- 
+            <span asp-validation-for="Email" class="text-danger"></span>
 
             @* Password *@    
-            <div class="input-with-icon">
-                <span asp-validation-for="Password" class="text-danger"></span>
-
+        <div class="input-with-icon">
                 <i class="bi bi-lock-fill text-white"></i>
-                <input class="form-control text-white" asp-for="Password" placeholder="Password" type="password"/>
+                <input asp-for="Password" class="form-control text-white" placeholder="Password" />
+            </div>
+            <span asp-validation-for="Password" class="text-danger"></span>
 
 
-            </div>
-            <div class="input-with-icon">
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                <i class="bi bi-lock-fill text-white"></i>
-                <input class="form-control text-white" 
-                       type="password"
-                       asp-for= "ConfirmPassword"  
-                       placeholder="Confirm Password"  />
-            </div>
+
+    <div class="input-with-icon">
+        <i class="bi bi-lock-fill text-white"></i>
+        <input asp-for="ConfirmPassword" class="form-control text-white" placeholder="Confirm Password" />
+    </div>
+    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
          
-
             <a asp-action="Login" asp-controller="Account">Already have an account?</a>
 
             <button type="submit" class="btn btn-primary mt-3">Register</button>

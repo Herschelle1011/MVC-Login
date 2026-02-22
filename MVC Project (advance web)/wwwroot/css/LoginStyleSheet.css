@@ -204,5 +204,10 @@ h2 {
  margin-top: 10px !important;
 }
 
-
-
+.text-danger {
+    font-size: 13px;
+    color: #ff8080;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    display: block;
+}

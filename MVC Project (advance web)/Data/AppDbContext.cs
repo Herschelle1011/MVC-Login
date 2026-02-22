@@ -6,6 +6,7 @@ namespace MVC_Project__advance_web_.Data
 {
     public class AppDbContext : DbContext
     {
+        //INHERIT DB CONTEXT FOR DATABASE 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
         { 
         

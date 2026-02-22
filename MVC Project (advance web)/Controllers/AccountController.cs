@@ -10,37 +10,36 @@ using System.Text.RegularExpressions;
 using Microsoft.Identity.Client;
 using MVC_Project__advance_web_.Data;
 using MVC_Project__advance_web_.Models;
-using System.ComponentModel.DataAnnotations;
+//using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
-using System.Text.RegularExpressions;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.Extensions.Configuration.UserSecrets;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
-using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-using System.Reflection.Metadata;
-using System.Diagnostics;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.AspNetCore.Connections.Features;
-using System.Threading.Tasks;
+//using System.Text.RegularExpressions;
+//using Microsoft.EntityFrameworkCore.Metadata.Internal;
+//using System.Runtime.CompilerServices;
+//using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
+//using Microsoft.Extensions.Configuration.UserSecrets;
+//using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
+//using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+//using System.Reflection.Metadata;
+//using System.Diagnostics;
+//using Microsoft.AspNetCore.SignalR;
+//using Microsoft.AspNetCore.Connections.Features;
+//using System.Threading.Tasks;
 using Microsoft.SqlServer.Server;
-using AspNetCoreGeneratedDocument;
+//using AspNetCoreGeneratedDocument;
 using MVC_Project__advance_web_.ViewModels;
+using Microsoft.AspNetCore.Identity.Data;
 
 namespace MVC_Project__advance_web_.Controllers
 {
     public class AccountController : Controller
     {
         private readonly AppDbContext _context;
-
-
-        public AccountController(AppDbContext db) //connect to DB 
+        public AccountController(AppDbContext db) //connect to Database from appdbcontext file
         {
             _context = db;
         }
 
-        //display register page
+        //display register page TO VIEW
         [HttpGet]
         public IActionResult Register()
         {
@@ -62,7 +61,7 @@ namespace MVC_Project__advance_web_.Controllers
                 return View(model);
             }
 
-            var allowedDomains = new List<string>
+            var allowedDomains = new List<string> //proper validations for valid domains
             {
                 "gmail.com",
                 "yahoo.com",
@@ -74,10 +73,9 @@ namespace MVC_Project__advance_web_.Controllers
 
             if (!allowedDomains.Contains(domain))
             {
-              ModelState.AddModelError("Email", "Email domain is not allowed. Please use a valid email address.");
-                return View(model);
+              ModelState.AddModelError("Email", "Email domain is not allowed. Please use a valid email address."); //show error message if not valid domain 
+                return View(model); //returns to view
             }
-
 
             var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$";
 
@@ -107,7 +105,7 @@ namespace MVC_Project__advance_web_.Controllers
 
 
             _context.Users.Add(user); //ADD USERS PER REGISTER
-            await _context.SaveChangesAsync(); //SAVE TO DB
+            await _context.SaveChangesAsync(); //SAVE TO Database table
 
             return RedirectToAction("Login", "Account"); //DIRECT TO LOGIN
         }
@@ -121,32 +119,22 @@ namespace MVC_Project__advance_web_.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ResetPass(int id, string newpassword, string confirmPassword)
+        public async Task<IActionResult> ResetPass(ResetViewModel reset)
         {
-            if (string.IsNullOrEmpty(newpassword) || string.IsNullOrEmpty(confirmPassword))
+            if (!ModelState.IsValid)
             {
-                ViewBag.Error = "password doesn't exist.";
-                ViewBag.Email = newpassword;
-                return View();
+                return View(reset);
             }
 
-            if(newpassword != confirmPassword)
-            {
-                ViewBag.Error = "password doesn't match.";
-                ViewBag.Email = newpassword;
-                return View();
-            }
-
-            var users = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+          
+            var users = await _context.Users.FirstOrDefaultAsync(u => u.Id == reset.id);
 
             if(users == null)
             {
-                ViewBag.Error = "User not found!";
-                ViewBag.Email = newpassword;
-                return View();
+                ModelState.AddModelError("Email", "Email doesn't exist");
             }
 
-            users.Password = newpassword;
+            users.Password = reset.newPassword;
           
             await _context.SaveChangesAsync();
             return RedirectToAction("Login", "Account");
@@ -159,7 +147,7 @@ namespace MVC_Project__advance_web_.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(LoginViewModel model)
+        public async Task<IActionResult> ForgotPassword(EmailViewModel model)
         {
             if (!ModelState.IsValid)//ERROR INPUT
             {
@@ -208,15 +196,12 @@ namespace MVC_Project__advance_web_.Controllers
             }
 
 
-
-
             if (user.Password != model.Password)
             {
-                ModelState.AddModelError("", "Incorrect Email or Password");
+                ModelState.AddModelError("Email", "Incorrect Email or Password");
                 return View(model);
 
             }
-
 
             var claim = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),//CREATE/generate TOKEN TO ITS CURRENT UserID assigned
@@ -231,6 +216,8 @@ namespace MVC_Project__advance_web_.Controllers
 
             return RedirectToAction("Index", "HomePage"); //directed to home 
         }
+
+
             [HttpPost]
             public async Task<IActionResult> Logout() 
             {

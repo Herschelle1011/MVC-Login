@@ -1,4 +1,4 @@
-﻿
+﻿@model MVC_Project__advance_web_.ViewModels.ResetViewModel;
 
 @{
     ViewData["Title"] = "Reset Password";
@@ -6,7 +6,6 @@
 }
 
 <div class="container-box-Login">
-
     <div class="img-top">
         <div class="Message">
             <h2>RESET YOUR<br>PASSWORD</h2>
@@ -18,43 +17,26 @@
 
         <h2 class="title">FORGOT PASSWORD</h2>
         <p class="welcome-text">We’ll help you recover access</p>
-
         @* POST METHOD TO CONTROLLER *@
         <form asp-action="ResetPass" asp-controller="Account" method="post">
             Password
-
             <input type="hidden" name="id" value="@ViewBag.UserId" />
 
+
+
             <div class="input-with-icon">
                 <i class="bi bi-lock-fill text-white"></i>
-                <input class="form-control text-white"
-                       type="password"
-                       name="newpassword"
-                       placeholder="New Password" />
-
-                @if (ViewBag.ConfirmError != null)
-                {
-                    <span class="text-danger">@ViewBag.ConfirmError</span>
-                }
-
+                <input asp-for="Password" class="form-control text-white" placeholder="New Password" />
             </div>
+            <span asp-validation-for="Password" class="text-danger"></span>
+
+
+
             <div class="input-with-icon">
                 <i class="bi bi-lock-fill text-white"></i>
-                <input class="form-control text-white"
-                       type="password"
-                       name="confirmPassword"
-                       placeholder="Confirm Password" />
+                <input asp-for="newPassword" class="form-control text-white" placeholder="Confirm Password" />
             </div>
-
-            @if (ViewBag.Error != null)
-            {
-                <span class="text-danger">@ViewBag.Error</span>
-            }
-
-            @if (ViewBag.Success != null)
-            {
-                <span class="text-success">@ViewBag.Success</span>
-            }
+            <span asp-validation-for="newPassword" class="text-danger"></span>
 
 
             <a asp-action="Login" asp-controller="Account">
