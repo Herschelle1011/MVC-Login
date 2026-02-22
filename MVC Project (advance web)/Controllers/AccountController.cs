@@ -26,6 +26,7 @@ using Microsoft.AspNetCore.Connections.Features;
 using System.Threading.Tasks;
 using Microsoft.SqlServer.Server;
 using AspNetCoreGeneratedDocument;
+using MVC_Project__advance_web_.ViewModels;
 
 namespace MVC_Project__advance_web_.Controllers
 {
@@ -47,24 +48,19 @@ namespace MVC_Project__advance_web_.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string email, string password, string confirmPassword)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password) || string.IsNullOrEmpty(confirmPassword))//PROPER VALIDATION
-            {
-                ViewBag.Error = "Email or Password must not be empty!";
-                ViewBag.Email = email;
-                return View();
-            }
 
-            bool exist = await _context.Users.AnyAsync(u => u.Email == email);//IS EMAIL ALREADY EXISTED?
+            if (!ModelState.IsValid) {
+                return View(model);
+            } 
+
+            bool exist = await _context.Users.AnyAsync(u => u.Email == model.Email);//IS EMAIL ALREADY EXISTED?
             if (exist) //IF TRUE
             {
-                ViewBag.Error = "Email already Exist!";
-                ViewBag.Email = email;
-
-                return View();
+                ModelState.AddModelError("Email", "Email already exists!"); //if exist  add error message to email
+                return View(model);
             }
-
 
             var allowedDomains = new List<string>
             {
@@ -74,43 +70,39 @@ namespace MVC_Project__advance_web_.Controllers
                 "hotmail.com"
             };
 
-            string domain = email.Split('@')[1].ToLower();
+            string domain = model.Email.Split('@')[1].ToLower();
 
             if (!allowedDomains.Contains(domain))
             {
-                ViewBag.Error = "Only common email providers are allowed.";
-                ViewBag.Email = email;
-                return View();
+              ModelState.AddModelError("Email", "Email domain is not allowed. Please use a valid email address.");
+                return View(model);
             }
 
 
             var emailPattern = @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9-]+\.[a-zA-Z]{2,}$";
 
-            if (!Regex.IsMatch(email, emailPattern))
+            if (!Regex.IsMatch(model.Email, emailPattern))
             {
-                ViewBag.Error = "Invalid email format.";
-                ViewBag.Email = email;
-                return View();
+               ModelState.AddModelError("Email", "Invalid email format.");
+                return View(model);
             }
             // Prevent double dots
-            if (email.Contains(".."))
+            if (model.Email.Contains(".."))
             {
-                ViewBag.Error = "Email cannot contain consecutive dots.";
-                ViewBag.Email = email;
-                return View();
+                ModelState.AddModelError("Email", "Email cannot contain multiple dots.");
+                return View(model);
             }
 
-            if (password != confirmPassword)
+            if (model.Password != model.ConfirmPassword)
             {
-                ViewBag.ConfirmError = "Password does not match!"; //IF PASSWORD DOESNT MATCH
-                ViewBag.password = password;
-                return View();
+                ModelState.AddModelError("Password", "Password doesn't match");
+                return View(model);
             }
 
             var user = new Users
             {
-                Email = email,
-                Password = password
+                Email = model.Email,
+                Password = model.Password
             };
 
 
@@ -166,25 +158,21 @@ namespace MVC_Project__advance_web_.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult> ForgotPassword(string email)
+        public async Task<IActionResult> ForgotPassword(LoginViewModel model)
         {
-            if (string.IsNullOrEmpty(email))//ERROR INPUT
+            if (!ModelState.IsValid)//ERROR INPUT
             {
-                ViewBag.Error = "Email and Password is required.";
-                ViewBag.Pass = email;
-                return View();
+               return View(model);
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
             
 
             if (user == null)
             {
-                ViewBag.Error = "Email doesn't exist.";
-                ViewBag.Email = email;
-                return View();
+               ModelState.AddModelError("Email", "Email doesn't Exist");
+                return View(model);
             }
 
      
@@ -193,7 +181,7 @@ namespace MVC_Project__advance_web_.Controllers
             return RedirectToAction("ResetPass",new { id = userId });
 
             //await _context.SaveChangesAsync();
-            //return RedirectToAction("Login", "Account"); 
+            //return RedirectToAction("Login", "Account");
 
         }
 
@@ -204,29 +192,31 @@ namespace MVC_Project__advance_web_.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string email, string password) 
+        public async Task<IActionResult> Login(LoginViewModel model) 
         {
-            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(password))//ERROR INPUT
-            { 
-                ViewBag.Error = "Email and Password is required."; 
-                ViewBag.Pass = password;
-                return View();
+           if(!ModelState.IsValid) //VALIDATION
+            {
+                ModelState.AddModelError("", "Incorrect Email or Password");
+                return View(model);
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email); //FIND EMAIL 
-            if (user == null) //IF NOT EXIST
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == model.Email); //FIND EMAIL 
+            if (user == null) //IF user NOT EXIST
             {
-                ViewBag.Error = "Email or Password is incorrect";
-                ViewBag.Email = email;
-                return View();
+                ModelState.AddModelError("Email", "Email doesn't Exist");
+                return View(model);
             }
 
-            if (user.Password != password) //IS PASSWORD VALID?
+
+
+
+            if (user.Password != model.Password)
             {
-                ViewBag.Error = "Invalid Password";
-                ViewBag.Password = password;
-                return View();
+                ModelState.AddModelError("", "Incorrect Email or Password");
+                return View(model);
+
             }
+
 
             var claim = new List<Claim> {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),//CREATE/generate TOKEN TO ITS CURRENT UserID assigned
@@ -239,18 +229,13 @@ namespace MVC_Project__advance_web_.Controllers
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal); //sign IN to current User
 
-            return RedirectToAction("Index", "Home"); //directed to home 
+            return RedirectToAction("Index", "HomePage"); //directed to home 
         }
-
             [HttpPost]
             public async Task<IActionResult> Logout() 
             {
-            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //reset token logout
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme); //reset token logout proceed to login
             return RedirectToAction("Login", "Account"); 
             }
-        public IActionResult Index()
-        {
-            return View();
-        }
     }
 }

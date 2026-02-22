@@ -1,9 +1,11 @@
-﻿
+﻿@model MVC_Project__advance_web_.ViewModels.LoginViewModel;
+
 @{
     Layout = "_LoginLayout";
 }
 
 <div class="container-box-Login">
+    <div asp-validation-summary="All"></div>
 
     <div class="img-top">
         <div class="Message">
@@ -16,35 +18,28 @@
         <h2 class="title">USER LOGIN</h2>
         <p class="welcome-text">Welcome Back</p>
 
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
         @* post LOGIN method *@
         <form asp-action="Login" asp-controller="Account" method="post"> 
 
             @* Email *@
-            <span class="text-danger"</span>
             <div class="input-with-icon">
                 <i class="bi bi-person-fill text-white"></i>
-                <input class="form-control text-white"
-                       type="email"
-                       name="email"
-                       value="@ViewBag.Email"
-                       placeholder="Email" />
-            </div>
+                <input class="form-control text-white" asp-for="Email" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
 
-
-       
+            </div>    
                 @* Password *@
-            <span class="text-danger"</span>
             <div class="input-with-icon">
                 <i class="bi bi-lock-fill text-white"></i>
-                <input class="form-control text-white"
-                       type="password"
-                       name="password"
-                       value="@ViewBag.Password"
-                       placeholder="Password" />
+                <input asp-for="Password" class="form-control text-white" placeholder="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+
             </div>
+
             <a class="forgot" asp-action="ForgotPassword" asp-controller="Account">Forgot Password?</a>
             <a asp-action="Register" asp-controller="Account">Register here</a>
-
             <button type="submit" class="btn btn-primary mt-3">Login</button>
         </form>
     </div>

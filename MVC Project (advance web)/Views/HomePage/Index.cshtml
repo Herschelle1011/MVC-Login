@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = "_Layout";
+}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark custom-navbar py-3 fixed-top">
+    <div class="container-fluid px-5">
+
+        <a class="navbar-brand fw-bold text-white" href="#">LR</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+            <ul class="navbar-nav gap-4 fw-semibold">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">CONTROLLERS</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">ACCESSORIES</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">PARTNERS</a>
+                </li>
+                <li class="nav-item">
+                    <form asp-action="Logout" asp-controller="Account" method="post">
+                        <button type="submit" class="nav-link btn btn-link text-white p-0">Logout</button>
+                    </form>
+                </li>
+            </ul>
+        </div>
+
+        <div class="d-flex gap-3">
+            <i class="bi bi-search text-white fs-5"></i>
+            <i class="bi bi-cart text-white fs-5"></i>
+        </div>
+
+    </div>
+</nav>
+
+
+<!-- Hero Section -->
+<section class="position-relative vh-100 ">
+
+    <!-- Background Video -->
+    <video autoplay muted loop playsinline
+           class="position-absolute top-0 start-0 w-100 h-160 object-fit-cover">
+        <source src="https://res.cloudinary.com/scuf-pwa/video/upload/q_auto/v1769808816/2026_Customization_Valor_Update_16x9_hyqpjj.mp4" type="video/mp4">
+    </video>
+
+  @*   <!-- Light Overlay (like screenshot) -->
+    <div class="position-absolute top-0 start-0 w-100 h-100"
+         style="background: rgba(255, 210, 120, 0.65);"></div> *@
+
+    <!-- Content -->
+    <div class="container-fluid position-relative text-dark px-5 hero-content">
+
+        <div class="col-lg-6">
+
+            <h1 class="display-1 fw-bold text-uppercase">
+                ENDLESS CUSTOMIZE
+            </h1>
+
+            <p class="lead mt-4">
+                Create a controller that matches your style.<br>
+                Pick from bold colors, unique designs, and more.
+            </p>
+
+            <a href="#" class="btn btn-light fw-bold px-4 py-3 mt-4">
+                CUSTOMIZE >
+            </a>
+
+        </div>
+    </div>
+
+</section>
+

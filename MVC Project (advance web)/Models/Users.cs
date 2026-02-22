@@ -12,6 +12,9 @@ namespace MVC_Project__advance_web_.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Password is required")]
+        [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
+
+   
     }
 }

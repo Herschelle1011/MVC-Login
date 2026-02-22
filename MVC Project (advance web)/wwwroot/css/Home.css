@@ -1,0 +1,54 @@
+﻿.custom-navbar {
+    background: linear-gradient(90deg, #4b0082, #8a2be2, #ff00cc);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+}
+
+.navbar .nav-link:hover {
+    color: #ff8cff !important;
+    transition: 0.3s ease;
+}
+
+.gradient-text {
+    display: inline-block; /* important for some cases */
+    background: linear-gradient(90deg, #ffffff, #ff8cff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* standard */
+    -webkit-text-fill-color: transparent; /* Chrome/Safari */
+}
+
+.display-1 {
+ 
+    color: white;
+    font-family: "Goldman", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 100px;
+    text-shadow: 0 4px 35px rgba(0, 0, 0, 0.4);
+}
+
+
+.lead {
+    font-family: "Space Grotesk", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 50;
+    font-style: normal;
+    font-size: 25px;
+    color: black;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), /* white glow */
+    0 4px 35px rgba(0, 0, 0, 0.4); /* existing dark shadow */
+}
+
+
+.hero-content {
+    padding-top: 140px;
+}
+
+
+.navbar-brand {
+    font-size: 50px;
+    font-family: "Goldman", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
